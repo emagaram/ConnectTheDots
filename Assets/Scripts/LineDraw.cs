@@ -47,7 +47,7 @@ public class LineDraw: MonoBehaviour
         
 
         //Stopping a new line on a dot
-        else if (startedDrawing && !stoppedDrawing && dotTouching && dotStarted != dotTouching && line && !dotTouching.connected)
+        else if (startedDrawing && !stoppedDrawing && dotTouching && dotStarted != dotTouching && line && !dotTouching.connected && line.GetComponent<Line>().valid)
         {
             dotTouching.connected = true;
             linePos = dotTouching.transform.position;
@@ -77,6 +77,11 @@ public class LineDraw: MonoBehaviour
             {
                 line.material = materialDisable;
 
+            }
+
+            if (stoppedDrawing)
+            {
+                line.gameObject.SetActive(false);
             }
         }
     }
