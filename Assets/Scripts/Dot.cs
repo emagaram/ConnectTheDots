@@ -4,22 +4,11 @@ using UnityEngine;
 
 public class Dot : MonoBehaviour
 {
-    public static int dotIDCounter = 0;
-    public int ID;
-
-    void Awake()
-    {
-        ID = dotIDCounter;
-        dotIDCounter++;
-    }
-
+    public bool connected = false;
     void OnMouseEnter()
     {
         //If your mouse hovers over the GameObject with the script attached, output this message
-        LineDraw.dotTouching = ID;
-        LineDraw.dotPos = transform.position;
-        Debug.Log("DT: " + LineDraw.dotTouching);
-        Debug.Log("DS: " + LineDraw.dotStarted);
+        LineDraw.dotTouching = this;
         Debug.Log("SD: " + LineDraw.startedDrawing);
         Debug.Log("SpD: " + LineDraw.stoppedDrawing);
 
@@ -29,6 +18,6 @@ public class Dot : MonoBehaviour
     void OnMouseExit()
     {
         //The mouse is no longer hovering over the GameObject so output this message each frame
-        LineDraw.dotTouching = -1;
+        LineDraw.dotTouching = null;
     }
 }
