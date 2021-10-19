@@ -91,7 +91,7 @@ public class LineDraw: MonoBehaviour
         line = new GameObject("Line" + currLines).AddComponent<LineRenderer>();
         line.gameObject.AddComponent<EdgeCollider2D>();
         line.gameObject.AddComponent<Line>();
-        line.GetComponent<EdgeCollider2D>().edgeRadius = 0.2f;
+        line.GetComponent<EdgeCollider2D>().edgeRadius = 0.17f;
         //line.GetComponent<EdgeCollider2D>().isTrigger = true;
         line.tag = "Line";
         line.material = material;
