@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class LineDraw: MonoBehaviour
 {
@@ -9,20 +10,59 @@ public class LineDraw: MonoBehaviour
     private Vector3 linePos;
     public Material material;
     public Material materialDisable;
+    public AudioSource connect;
+    public Game game;
 
     private int currLines = 0;
     public static Dot dotTouching;
     public static Dot dotStarted;
     public static bool startedDrawing = false;
     public static bool stoppedDrawing = false;
+    public string nextScene;
 
 
+    List<GameObject> lines;
+    private void Start()
+    {
+        lines = new List<GameObject>();
+    }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            dotStarted = null;
+            dotTouching = null;
+            startedDrawing = false;
+            stoppedDrawing = false;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // loads current scene
+        }
         //Start and stop drawing checks
-        if(Input.GetMouseButtonDown(0) && startedDrawing)
+        if (Input.GetMouseButtonDown(0) && startedDrawing)
         {
             stoppedDrawing = true;
+            
+            if(line) line.gameObject.SetActive(false);
+            if (game.Evaluate())
+            {
+                dotStarted = null;
+                dotTouching = null;
+                startedDrawing = false;
+                stoppedDrawing = false;
+                SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
+            }
+            else
+            {
+                for(int i=0; i < lines.Count; i++)
+                {
+                    Destroy(lines[i].gameObject);
+                    stoppedDrawing = false;
+                    startedDrawing = false;
+                    dotStarted = null;
+                    dotTouching = null;
+                    startedDrawing = false;
+                    stoppedDrawing = false;
+                }
+            }
         }
 
         if (Input.GetMouseButtonDown(0) && dotTouching && !startedDrawing)
@@ -47,7 +87,7 @@ public class LineDraw: MonoBehaviour
         
 
         //Stopping a new line on a dot
-        else if (startedDrawing && !stoppedDrawing && dotTouching && dotStarted != dotTouching && line && !dotTouching.connected && line.GetComponent<Line>().valid)
+        else if (startedDrawing && !stoppedDrawing && dotTouching && dotStarted != dotTouching && line && (!dotTouching.connected || dotTouching is SquareDot)&& line.GetComponent<Line>().valid)
         {
             dotTouching.connected = true;
             linePos = dotTouching.transform.position;
@@ -55,7 +95,8 @@ public class LineDraw: MonoBehaviour
             line.SetPosition(1, linePos);
             updateLineCollider(line.gameObject);
             line.GetComponent<Line>().end = dotTouching;
-
+            connect.Play();
+            lines.Add(line.gameObject);
             line = null;
             currLines++;
             dotStarted = null;

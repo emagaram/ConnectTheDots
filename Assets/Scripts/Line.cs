@@ -16,6 +16,12 @@ public class Line : MonoBehaviour
         bool prevent = false;
         for(int i = 0; i < results.Count; i++)
         {
+            if (results[i].GetComponent<SquareDot>())
+            {
+                prevent = false;
+                valid = true;
+                break;
+            }
             if (results[i].GetComponent<Line>())
             {
                 Line otherLine = results[i].GetComponent<Line>();

@@ -11,8 +11,6 @@ public class Dot : MonoBehaviour
         LineDraw.dotTouching = this;
         Debug.Log("SD: " + LineDraw.startedDrawing);
         Debug.Log("SpD: " + LineDraw.stoppedDrawing);
-
-
     }
 
     void OnMouseExit()
